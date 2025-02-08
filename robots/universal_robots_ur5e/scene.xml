@@ -1,5 +1,5 @@
 <mujoco model="ur5e scene">
-  <include file="ur5e.xml"/>
+  <include file="ur5e_with_mass.xml"/>
 
   <statistic center="0.3 0 0.3" extent="0.8" meansize="0.08"/>
 

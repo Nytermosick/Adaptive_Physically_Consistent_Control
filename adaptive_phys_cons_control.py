@@ -37,7 +37,7 @@ def joint_controller(q: np.ndarray, dq: np.ndarray, phi_hat, t: float) -> np.nda
 
     #errors
     q_err = q_des - q
-    print('q_err\n' , q_err)
+    #print('q_err\n' , q_err)
 
     dq_err = dq_des - dq
 
@@ -50,9 +50,13 @@ def joint_controller(q: np.ndarray, dq: np.ndarray, phi_hat, t: float) -> np.nda
     regressor = pin.computeJointTorqueRegressor(model, data, q, dq_ref, ddq_ref) # regression matrix of system dynamic 6x60
     regressor_6_link = regressor[:, 50:] # regression matrix for last link 6x10
     
-    gamma = 50000 # learning rate
+    gamma = 100000.0 # learning rate
+    
+    print('phi_hat\n', phi_hat, '\n')
     
     log_cholesky = pin.LogCholeskyParameters(phi_hat) # Class for log-cholesky parameters [alpha, d1, d2, d3, s12, s23, s13, t1, t2, t3]
+    print('log_cholesky\n', log_cholesky, '\n')
+
     jacobian = log_cholesky.calculateJacobian() # Jacobian of log-cholesky parameters
 
     phi_dot_hat = 1/gamma * np.linalg.inv(jacobian) @ regressor_6_link.T @ s # unknown parameters update
@@ -65,6 +69,8 @@ def joint_controller(q: np.ndarray, dq: np.ndarray, phi_hat, t: float) -> np.nda
     phi_hat = phi_hat + dt * phi_dot_hat # unknown parameters integration (prediction)
 
     theta_hat = pin.LogCholeskyParameters(phi_hat).toDynamicParameters() # predicted parameters of last link in the end
+    print('theta_hat\n', theta_hat)
+    print('\n\n')
 
     state_vector = np.hstack([state_vector, theta_hat]) # column-vector state vector with predicted parameters of last link in the end
 
@@ -77,9 +83,6 @@ def joint_controller(q: np.ndarray, dq: np.ndarray, phi_hat, t: float) -> np.nda
     return u, phi_hat, q_err
 
 def main():
-
-    # Create logging directories
-    Path("logs/videos").mkdir(parents=True, exist_ok=True)
     
     print("\nRunning real-time joint space control...")
     sim = Simulator(

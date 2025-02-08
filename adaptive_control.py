@@ -70,9 +70,6 @@ def joint_controller(q: np.ndarray, dq: np.ndarray, p_hat, t: float) -> np.ndarr
     return u, p_hat, q_err
 
 def main():
-
-    # Create logging directories
-    Path("logs/videos").mkdir(parents=True, exist_ok=True)
     
     print("\nRunning real-time joint space control...")
     sim = Simulator(
