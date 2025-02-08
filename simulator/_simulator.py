@@ -430,10 +430,10 @@ class Simulator:
                     )
                 else:
                     u, p_hat, q_err = self.controller(
-                        q=state['q'],
-                        dq=state['dq'],
-                        p_hat=p_hat_in,
-                        t=t
+                        state['q'],
+                        state['dq'],
+                        p_hat_in,
+                        t
                     )
                 
                 # Step simulation
