@@ -1,0 +1,28 @@
+name: apcc_env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - ipykernel
+  - jupyter
+  - libgfortran5
+  - matplotlib
+  - mesalib
+  - scipy
+  - pinocchio
+  - quarto
+  - nbformat
+  - pip:
+      - robot_descriptions
+      - mujoco
+      - mediapy
+      # - darli
+      # - cvxpy 
+      # - cvxpygen
+
+      # Чтобы развернуть окружение, выполните команду:
+      # conda env create -f environment.yml
+
+      # Чтобы активировать окружение, выполните команду:
+      # conda activate apcc_env
