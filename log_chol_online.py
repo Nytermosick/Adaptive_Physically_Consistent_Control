@@ -3,9 +3,15 @@ import numpy as np
 from time import perf_counter
 import matplotlib.pyplot as plt
 
-log_cholesky = pin.LogCholeskyParameters(0.5*np.random.randn(10))
-In = pin.Inertia.FromLogCholeskyParameters(log_cholesky)
-theta_true = log_cholesky.toDynamicParameters()
+log_cholesky = pin.LogCholeskyParameters(0.5*np.random.randn(10)) # Class for log-cholesky parameters [alpha, d1, d2, d3, s12, s23, s13, t1, t2, t3]
+# print(log_cholesky)
+In = pin.Inertia.FromLogCholeskyParameters(log_cholesky) # Mapping to inertial parameters [m, c_x, c_y, c_z, Ixx, Ixy, Iyy, Ixz, Iyz, Izz]
+# print(In)
+# print(In.toDynamicParameters())
+theta_true = log_cholesky.toDynamicParameters() # Mapping to inertial parameters [m, mc_x, mc_y, mc_z, I_{xx}, I_{xy}, I_{yy}, I_{xz}, I_{yz}, I_{zz}]^T
+                                                # where I = I_C + mS^T(c)S(c) and I_C has its origin at the barycenter
+# print(theta_true)
+
 # theta in physical consistancy
 # eta in R^10 
 # y = Y@theta(eta)
@@ -22,7 +28,7 @@ theta_true = log_cholesky.toDynamicParameters()
 # deta_hat/dt = -Jac*gamma*Y*s
 
 # deta_hat/dt = (Jac)^{-1}*dtheta_hat/dt
-#= -Jac*gamma*Y*s
+#             = -Jac^{-1}*gamma*Y*s
 
 N = 2000
 Y = np.random.randn(N, 10)
