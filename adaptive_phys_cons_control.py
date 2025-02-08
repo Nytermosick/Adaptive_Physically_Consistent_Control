@@ -63,9 +63,9 @@ def joint_controller(q: np.ndarray, dq: np.ndarray, phi_hat, t: float) -> np.nda
 
     phi_hat = phi_hat + dt * phi_dot_hat # unknown parameters integration (prediction)
 
-    p_hat = pin.LogCholeskyParameters(phi_hat).toDynamicParameters() # predicted parameters of last link in the end
+    theta_hat = pin.LogCholeskyParameters(phi_hat).toDynamicParameters() # predicted parameters of last link in the end
 
-    state_vector = np.hstack([state_vector, p_hat]) # column-vector state vector with predicted parameters of last link in the end
+    state_vector = np.hstack([state_vector, theta_hat]) # column-vector state vector with predicted parameters of last link in the end
 
     #print(state_vector.shape)
     #print('p_hat\n', p_hat)
