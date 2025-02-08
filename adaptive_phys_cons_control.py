@@ -50,11 +50,12 @@ def joint_controller(q: np.ndarray, dq: np.ndarray, phi_hat, t: float) -> np.nda
     regressor = pin.computeJointTorqueRegressor(model, data, q, dq_ref, ddq_ref) # regression matrix of system dynamic 6x60
     regressor_6_link = regressor[:, 50:] # regression matrix for last link 6x10
     
-    gamma = 1000000 # learning rate
+    gamma = 50000 # learning rate
     
     log_cholesky = pin.LogCholeskyParameters(phi_hat) # Class for log-cholesky parameters [alpha, d1, d2, d3, s12, s23, s13, t1, t2, t3]
     jacobian = log_cholesky.calculateJacobian() # Jacobian of log-cholesky parameters
-    phi_dot_hat = 1/gamma * jacobian @ regressor_6_link.T @ s # unknown parameters update
+
+    phi_dot_hat = 1/gamma * np.linalg.inv(jacobian) @ regressor_6_link.T @ s # unknown parameters update
 
     state_vector = model.inertias[0].toDynamicParameters() # filling state vector with known parameters
     for i in range(1, 5):
