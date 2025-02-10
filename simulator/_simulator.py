@@ -411,7 +411,7 @@ class Simulator:
             pin_model = pin.buildModelFromMJCF('/home/gleb/.mujoco/forc/hw/mujoco_template/robots/universal_robots_ur5e/ur5e.xml')
             pin_data = pin_model.createData()
 
-            p_hat_in = np.zeros(10)
+            phi_hat_in = np.zeros(10)
             self.real = pin_model.inertias[5].toDynamicParameters()
 
             while (not viewer or viewer.is_running()):
@@ -429,10 +429,10 @@ class Simulator:
                         t=t
                     )
                 else:
-                    u, p_hat, q_err = self.controller(
+                    u, phi_hat, q_err = self.controller(
                         state['q'],
                         state['dq'],
-                        p_hat_in,
+                        phi_hat_in,
                         t
                     )
                 
@@ -440,11 +440,11 @@ class Simulator:
                 self.times.append(t)
 
                 self.controls.append(u)
-                self.estimated.append(p_hat)
+                self.estimated.append(phi_hat)
                 self.pos_err.append(q_err)
 
                 self.step(u)
-                p_hat_in = p_hat
+                phi_hat_in = phi_hat
 
                 # Update visualization
                 if viewer:

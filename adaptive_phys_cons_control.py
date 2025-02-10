@@ -50,7 +50,7 @@ def joint_controller(q: np.ndarray, dq: np.ndarray, phi_hat, t: float) -> np.nda
     regressor = pin.computeJointTorqueRegressor(model, data, q, dq_ref, ddq_ref) # regression matrix of system dynamic 6x60
     regressor_6_link = regressor[:, 50:] # regression matrix for last link 6x10
     
-    gamma = 100000.0 # learning rate
+    gamma = 80000.0 # learning rate
     
     print('phi_hat\n', phi_hat, '\n')
     
